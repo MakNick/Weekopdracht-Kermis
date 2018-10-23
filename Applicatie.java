@@ -8,5 +8,4 @@ public class Applicatie {
 		kermis.kermisStarten();
 		
 	}
-
 }

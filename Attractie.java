@@ -2,34 +2,38 @@ package weekopdrachtKermis;
 
 abstract public class Attractie {
 	String attractieNaam;
-	double attractiePrijs, omzetAttractie;
-	int oppervlakte, aantalRitten;
-	abstract void attractieStarten();
-}
-
-class Botsauto extends Attractie{
-	Botsauto() {
-		attractieNaam = "Botsauto's";
-		attractiePrijs = 2.50;
-	}
+	double attractiePrijs, omzetAttractie, gereserveerdeBelasting;
+	int oppervlakte, aantalRitten, draaiLimiet;
+	
 	void attractieStarten() {
 		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
 		omzetAttractie += attractiePrijs;
 		Kassa.totaleOmzet += attractiePrijs;
 		aantalRitten++;
+		
+		for(int i = 0; i < Kermis.attracties.length; i++) {
+			if(Kermis.attracties[i] instanceof GokAttractie) {
+				kansSpelBelastingBetalen();
+			}
+		}
+	}
+	
+	void opstellingsKeuring() {};
+	void kansSpelBelastingBetalen() {};
+}
+
+class Botsauto extends Attractie{
+	Botsauto() {
+		attractieNaam = "Botsauto's   ";
+		attractiePrijs = 2.50;
 	}
 }
 
-class Spin extends Attractie{
+class Spin extends RisicoRijkeAttractie{
 	Spin() {
-		attractieNaam = "Spin";
+		attractieNaam = "Spin        ";
 		attractiePrijs = 2.25;
-	}
-	void attractieStarten() {
-		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
-		omzetAttractie += attractiePrijs;
-		Kassa.totaleOmzet += attractiePrijs ;
-		aantalRitten++;
+		draaiLimiet = 5;
 	}
 }
 
@@ -38,49 +42,29 @@ class Spiegelpaleis extends Attractie{
 		attractieNaam = "Spiegelpaleis";
 		attractiePrijs = 2.75;
 	}
-	void attractieStarten() {
-		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
-		omzetAttractie += attractiePrijs;
-		Kassa.totaleOmzet += attractiePrijs;
-		aantalRitten++;
-	}
 }
 
 class Spookhuis extends Attractie{
 	Spookhuis() {
-		attractieNaam = "Spookhuis";
+		attractieNaam = "Spookhuis   ";
 		attractiePrijs = 3.20;
 	}
-	void attractieStarten() {
-		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
-		omzetAttractie += attractiePrijs;
-		Kassa.totaleOmzet += attractiePrijs;
-		aantalRitten++;
-	}
 }
 
-class Hawaii extends Attractie{
+class Hawaii extends RisicoRijkeAttractie{
 	Hawaii() {
-		attractieNaam = "Hawaii";
+		attractieNaam = "Hawaii      ";
 		attractiePrijs = 2.90;
-	}
-	void attractieStarten() {
-		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
-		omzetAttractie += attractiePrijs;
-		Kassa.totaleOmzet += attractiePrijs;
-		aantalRitten++;
+		draaiLimiet = 10;
 	}
 }
 
-class Ladderklimmen extends Attractie{
+class Ladderklimmen extends Attractie implements GokAttractie{
 	Ladderklimmen() {
 		attractieNaam = "Ladderklimmen";
 		attractiePrijs = 5.00;
 	}
-	void attractieStarten() {
-		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
-		omzetAttractie += attractiePrijs;
-		Kassa.totaleOmzet += attractiePrijs;
-		aantalRitten++;
+	public void kansSpelBelastingBetalen() {
+		gereserveerdeBelasting += (attractiePrijs * 0.3);
 	}
 }
