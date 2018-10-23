@@ -56,9 +56,9 @@ public class Kermis {
 			break;
 		default:
 			System.out.println("Verkeerde input.");
-			keuzeAttractie(invoer);
+			toonAttractieMenu();
+			keuzeAttractie(sc.nextLine());		
 		}
-		
 	}
 	
 	void toonOmzet() {
