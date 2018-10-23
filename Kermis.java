@@ -63,12 +63,15 @@ public class Kermis {
 	
 	void toonOmzet() {
 		for(int i = 0; i < attracties.length; i++) {
-			System.out.println("De omzet van " + attracties[i].attractieNaam + "    \t€" + attracties[i].omzetAttractie);
+			System.out.printf("De omzet van " + attracties[i].attractieNaam + "    \t€" + "%.2f",attracties[i].omzetAttractie);
+			System.out.println();
 		}
-		System.out.println("\nDe totale omzet is: \t\t€" + Kassa.totaleOmzet);
+		System.out.printf("\nDe totale omzet is: \t\t€" + "%.2f", Kassa.totaleOmzet);
+		System.out.println();
 		for(int j = 0; j < attracties.length; j++) {
 			if(attracties[j] instanceof GokAttractie)
-				System.out.println("\nHet gereserveerde bedrag voor de kansspelbelasting is: €" + attracties[j].gereserveerdeBelasting);
+				System.out.printf("\nHet gereserveerde bedrag voor de kansspelbelasting is: €" + "%.2f",attracties[j].gereserveerdeBelasting);
+				System.out.println();
 		}
 	}
 	
