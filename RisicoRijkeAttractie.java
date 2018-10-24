@@ -3,12 +3,17 @@ package weekopdrachtKermis;
 abstract public class RisicoRijkeAttractie extends Attractie {
 	int draaiLimiet;
 
-	void attractieStarten() {
+	void attractieStarten(Attractie attractie) {
 		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
 		omzetAttractie += attractiePrijs;
-		Kassa.totaleOmzet += attractiePrijs;
+		double tempTotaalOmzet = Kermis.kassa.getTotaalOmzet();
+		Kermis.kassa.setTotaalOmzet(tempTotaalOmzet += attractiePrijs);
 		aantalRitten++;
 		onderhoudsKeuring();
+		
+		if(attractie instanceof GokAttractie) {
+			((GokAttractie) attractie).kansSpelBelastingBetalen(attractie);
+		}
 	}
 	
 	void opstellingsKeuring() {

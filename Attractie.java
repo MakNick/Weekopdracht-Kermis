@@ -5,21 +5,17 @@ abstract public class Attractie {
 	double attractiePrijs, omzetAttractie, gereserveerdeBelasting;
 	int oppervlakte, aantalRitten, draaiLimiet;
 	
-	void attractieStarten() {
+	void attractieStarten(Attractie attractie) {
 		System.out.println("De attractie " + attractieNaam + " is gestart.\n");
 		omzetAttractie += attractiePrijs;
-		Kassa.totaleOmzet += attractiePrijs;
+		double tempTotaalOmzet = Kermis.kassa.getTotaalOmzet();
+		Kermis.kassa.setTotaalOmzet(tempTotaalOmzet += attractiePrijs);
 		aantalRitten++;
 		
-		for(int i = 0; i < Kermis.attracties.length; i++) {
-			if(Kermis.attracties[i] instanceof GokAttractie) {
-				kansSpelBelastingBetalen();
-			}
+		if(attractie instanceof GokAttractie) {
+			((GokAttractie) attractie).kansSpelBelastingBetalen(attractie);
 		}
 	}
-	
-	void opstellingsKeuring() {};
-	void kansSpelBelastingBetalen() {};
 }
 
 class Botsauto extends Attractie{
@@ -29,7 +25,7 @@ class Botsauto extends Attractie{
 	}
 }
 
-class Spin extends RisicoRijkeAttractie{
+class Spin extends RisicoRijkeAttractie implements GokAttractie {
 	Spin() {
 		attractieNaam = "Spin        ";
 		attractiePrijs = 2.25;
@@ -63,8 +59,5 @@ class Ladderklimmen extends Attractie implements GokAttractie{
 	Ladderklimmen() {
 		attractieNaam = "Ladderklimmen";
 		attractiePrijs = 5.00;
-	}
-	public void kansSpelBelastingBetalen() {
-		gereserveerdeBelasting += (attractiePrijs * 0.3);
 	}
 }
