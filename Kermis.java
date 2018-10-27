@@ -1,31 +1,41 @@
 package weekopdrachtKermis;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Kermis {
+	static LocalDateTime ldt = LocalDateTime.now();
+	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 	Scanner sc = new Scanner(System.in);
 	static Kassa kassa = new Kassa();
 	BelastingInspecteur bi = new BelastingInspecteur();
+	Monteur monteur = new Monteur("Piet");
+	
+	static Attractie[] attracties = {new Botsauto(), new Spin(), new Spiegelpaleis(), new Spookhuis(), new Hawaii(), new Ladderklimmen()};
 	
 	boolean kermisOpen = true;
 	
-	static Attractie[] attracties = {new Botsauto(), new Spin(), new Spiegelpaleis(), new Spookhuis(), new Hawaii(), new Ladderklimmen()};
-
 	void kermisStarten() {
 		keuringOpzettenAttracties();
 		while(kermisOpen) {
 			toonAttractieMenu();
-			keuzeAttractie(sc.nextLine());
+			try {
+				keuzeAttractie(sc.nextLine());
+			} catch (defectException de) {
+				System.out.println(de);
+			}
+			bi.belastingInnen(kassa.getTotaalBelasting());
 		}	
 	}
 	
 	void toonAttractieMenu() {
 		System.out.println("\nWelkom op de Kermis!\nKies een attractie: \n");
 		System.out.println("1. Botsauto's\n2. Spin\n3. Spiegelpaleis\n4. Spookhuis\n5. Hawaii\n6. Ladderklimmen\n");
-		System.out.println("b. Bezoek belasting inspecteur\no. Toon omzetten\nk. Toon aantal ritten\nq. Kermis verlaten");
+		System.out.println("m. Stuur monteur\no. Toon omzetten\nk. Toon aantal ritten\nq. Kermis verlaten");
 	}
-	
-	void keuzeAttractie(String invoer) {
+		
+	void keuzeAttractie(String invoer) throws defectException {
 		
 		switch(invoer) {
 		case "1": 
@@ -46,8 +56,8 @@ public class Kermis {
 		case "6": 
 			attracties[5].attractieStarten(attracties[5]);
 			break;
-		case "b": 
-			bi.belastingInnen(kassa.getTotaalBelasting());
+		case "m":
+			stuurMonteur(monteur);
 			break;
 		case "o": 
 			toonFinancien();
@@ -68,14 +78,14 @@ public class Kermis {
 	
 	void toonFinancien() {
 		for(int i = 0; i < attracties.length; i++) {
-			System.out.printf("De omzet van " + attracties[i].attractieNaam + "    \t€" + "%.2f",attracties[i].omzetAttractie);
+			System.out.printf("De omzet van " + attracties[i].attractieNaam + "    \t\t€" + "%.2f",attracties[i].omzetAttractie);
 			System.out.println();
 		}
-		System.out.printf("\nDe totale omzet is: \t\t€" + "%.2f", kassa.getTotaalOmzet());
-		System.out.printf("\nGereserveerd bedrag kansspelbelasting is: €" + "%.2f", kassa.getTotaalBelasting());
+		System.out.printf("\nDe totale omzet is: \t\t\t€" + "%.2f", kassa.getTotaalOmzet());
+		System.out.printf("\nGereserveerde kansspelbelasting is: \t€" + "%.2f", kassa.getTotaalBelasting());
 		System.out.println("\n");
 		bi.toonInnenGeschiedenis();
-		System.out.printf("\nDe totale winst na de bezoeken van de belastingdienst is: \t€" + "%.2f", kassa.getTotaalOmzet()-bi.getKasBelastingdienst());
+		System.out.printf("\nDe totale winst van de kermis is: \t€" + "%.2f", kassa.getTotaalOmzet() - bi.getKasBelastingdienst());
 		System.out.println();
 	}
 	
@@ -84,14 +94,23 @@ public class Kermis {
 		for(int i = 0; i < attracties.length; i++) {
 			System.out.println("Aantal ritten in " + attracties[i].attractieNaam + "   \t" + attracties[i].aantalRitten);
 		}
+		System.out.println("\nTotaal aantal ritten is: \t\t" + Attractie.totaalAantalRitten());
 	}
 	
 	void keuringOpzettenAttracties() {
 		for(int i = 0; i < attracties.length; i++) {
 			if(attracties[i] instanceof RisicoRijkeAttractie) {
-				((RisicoRijkeAttractie) attracties[i]).opstellingsKeuring();
+				monteur.opstellingsKeuring(attracties[i]);
 			}
 		}
+	}
+	
+	void stuurMonteur(Monteur monteur) {
+		for(int i = 0; i < attracties.length; i ++) {
+			if(attracties[i] instanceof RisicoRijkeAttractie) {
+				monteur.repareren(attracties[i]);
+			}
+		}	
 	}
 }
 
