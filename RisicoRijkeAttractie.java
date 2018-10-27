@@ -20,6 +20,5 @@ abstract public class RisicoRijkeAttractie extends Attractie {
 		} else {
 			throw new defectException(attractie);
 		}
-			
 	}
 }

@@ -1,9 +1,9 @@
 package weekopdrachtKermis;
 
 public class Monteur {
-	static String naam;
+	String naam;
 	Monteur(String naam){
-		Monteur.naam = naam;
+		this.naam = naam;
 	}
 	
 	public void opstellingsKeuring(Attractie attractie) {
